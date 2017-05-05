@@ -1,18 +1,20 @@
 # Social Media Module für REDAXO 5.x
-![Screenshot](https://raw.githubusercontent.com/greatif/redaxo_social-media_module/assets/instagram_backend_01.png)
-
 
 Instagram
 -------
 
+![Screenshot](https://github.com/greatif/redaxo_social-media_module/blob/master/instagram_backend_01.png)
+
 * Text
+
 Twitter
 -------
 
+
+![Screenshot](https://github.com/greatif/redaxo_social-media_module/blob/master/twitter_backend_01.png)
+
 * Text
 
-### Version
-
-### Änderungen
+### Text
 
 * Text
