@@ -1,0 +1,49 @@
+<?php
+
+	$userid		= substr(REX_VALUE[1], 0, 10);
+	$url		= 'https://api.instagram.com/v1/users/'.$userid.'/media/recent/?access_token=REX_VALUE[1]';
+	$output		= '';
+	$counter	= 0;
+
+	// cURL-Session initialisieren
+	$curl = curl_init();
+
+	// Optionen
+	curl_setopt_array($curl, array(
+		CURLOPT_RETURNTRANSFER => 1,
+		CURLOPT_URL => $url,
+		CURLOPT_TIMEOUT => 4
+	));
+
+	// Request senden und Antwort in $resp speichern
+	$resp = curl_exec($curl);
+
+	// cURL-Session beenden
+	curl_close($curl);
+
+	// Ausgabe der letzten 16 Bilder
+	if($resp){
+		$output .= '
+			<div class="instagram">';
+		$output .= '		
+			<h2 class="text-center">Instagram</h2><br>';
+	
+		$data=json_decode($resp, true);
+		foreach((array)$data['data'] as $images){
+			if ($counter < 16) {
+				$output .= '
+					<a href="'.$images['link'].'" ><img src="'.$images['images']['thumbnail']['url'].'" alt="'.$images['id'].'"/></a>';
+				$counter++;
+			}
+		}
+
+		$output .= '
+			</div>';
+		
+		echo $output;
+	
+	}
+
+	else echo "Es ist ein Fehler aufgetreten.";
+
+?>
