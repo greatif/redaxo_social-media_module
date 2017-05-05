@@ -11,6 +11,8 @@ Instagram
 
 ![Screenshot](https://github.com/greatif/redaxo_social-media_module/blob/master/instagram_backend_01.png)
 
+![Screenshot](https://github.com/greatif/redaxo_social-media_module/blob/master/instagram_frontend_01.png)
+
 Twitter
 -------
 
@@ -22,3 +24,5 @@ Twitter
 * ruft auch eventuelle Fotos der Tweets ab
 
 ![Screenshot](https://github.com/greatif/redaxo_social-media_module/blob/master/twitter_backend_01.png)
+
+![Screenshot](https://github.com/greatif/redaxo_social-media_module/blob/master/twitter_frontend_01.png)
