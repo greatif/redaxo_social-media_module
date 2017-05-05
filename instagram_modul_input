@@ -1,0 +1,27 @@
+<fieldset class="form-horizontal">
+
+    <legend>Anleitung</legend>
+	<div class="form-group">
+		<div class="col-sm-12">
+			<p>1. Auf <a href="https://instagram.com/developer/" target="_blank">instagram.com/developer/</a> eine neue App registrieren.</p>
+			<p>2. Dabei die im Reiter <b><i>Details</i></b> eingetragene <b>redirect URI</b> merken.</p>	
+			<p>3. Im Reiter <b><i>Security</i></b> das Häkchen bei <b><i>Disable implicit OAuth</i></b> entfernen.</p>
+			<p>4. Nach Abschluss der Registrierung erhält man eine <b>CLIENT-ID</b>.</p>
+			<p>5. Über <a href="https://instagram.com/oauth/authorize/?client_id=[CLIENT-ID]&amp;redirect_uri=[REDIRECT-URI]&amp;response_type=token" target="_blank">instagram.com/.../?client_id=<b>[CLIENT-ID]</b>&amp;redirect_uri=<b>[REDIRECT-URI]</b>&amp;response_type=token</a> den <b><u>ACCESS-TOKEN</u></b> ermitteln.</p>
+			<p>6. <b><u>ACCESS-TOKEN</u></b> nachstehend eintragen.</p>
+		</div>
+	</div>
+
+</fieldset>
+
+<fieldset class="form-horizontal">
+
+    <legend>Instagram Account-Daten</legend>
+		<div class="form-group">
+			<label class="col-sm-2 control-label" for="hight">ACCESS-TOKEN</label>
+			<div class="col-sm-10">
+				<input class="form-control" id="hight" type="text" name="REX_INPUT_VALUE[1]" value="REX_VALUE[1]" />
+			</div>
+		</div>
+
+</fieldset>
