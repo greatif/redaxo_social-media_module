@@ -1,0 +1,104 @@
+<?php
+    
+	$username 	= REX_VALUE[1];
+	$key 		= REX_VALUE[2];		// Consumer Key (API Key)
+	$secret 	= REX_VALUE[3];		// Consumer Secret (API Secret)
+	$counter 	= '0';				// Zähler, wieviele Tweets ausgegeben werden sollen
+
+	setlocale(LC_TIME, "de_DE.utf8");
+
+    $quest = "https://api.twitter.com/1.1/statuses/user_timeline.json?screen_name=" . urlencode($username) . "&tweet_mode=extended&include_rts=false&exclude_replies=true";
+    $tokenUrl = "https://api.twitter.com/oauth2/token";
+
+    $auth = base64_encode(urlencode($key) . ':' . urlencode($secret));
+
+    // BearerToken holen
+    $getToken = curl_init();
+    curl_setopt($getToken, CURLOPT_URL, $tokenUrl);
+    curl_setopt($getToken, CURLOPT_POST, 1);
+    curl_setopt($getToken, CURLOPT_HTTPHEADER, array('Authorization: Basic ' . $auth));
+    curl_setopt($getToken, CURLOPT_POSTFIELDS, "grant_type=client_credentials");
+    curl_setopt($getToken, CURLOPT_RETURNTRANSFER, 1);
+    
+    $token = json_decode(curl_exec($getToken));
+    $token = $token->access_token;
+    curl_close($getToken);
+
+    // Tweets holen
+	$curl = curl_init();
+    curl_setopt($curl, CURLOPT_URL, $quest);
+    curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+    curl_setopt($curl, CURLOPT_HTTPHEADER, array('Authorization: Bearer ' . $token));
+    $result = curl_exec($curl);
+    curl_close($curl);
+    
+    $tweets = json_decode($result);
+
+    // gibt das Array $tweets aus
+    // echo'<pre>';
+    // print_r ($tweets);
+    // echo'</pre>';
+
+    // Ausgabe
+	if(is_array($tweets) && count($tweets) > 0 ) {
+		
+	echo '<div class="row">';
+	echo '<h2 class="text-center">Tweets</h2><br>';
+		
+        foreach($tweets as $tweet) {
+		if ($counter < REX_VALUE[4]) {
+		
+		$text = $tweet->full_text;
+		if (rex_addon::get('hyphenator')->isAvailable()) {
+			$text = hyphenator::hyphenate($text);
+		}
+		
+		$media = $tweet->entities->media;
+            if (isset($media[0])) {
+                if ($media[0]->type == 'photo') {
+                    $item = $media[0]->media_url;
+					$medialink = '<p class="description text-center"><a href="'.$item.'" target="_blank"><img src="'.$item.'"></a></p>';
+                }
+            }
+
+?>
+
+        <div class="col-md-6 col-sm-12">
+			<div id="<?php echo $tweet->id_str; ?>" class="twitter">
+				<div class="content">
+					<p class="text"><a href="https://twitter.com/statuses/<?php echo $tweet->id_str; ?>" target="_blank"><img src="<?php echo $tweet->user->profile_image_url; ?>"><b> <?php echo $tweet->user->screen_name; ?></b></a></p>
+					<p class="text"><time datetime="<?php echo $tweet->created_at; ?>"><?php echo strftime("%A, den %d %B %Y, %H:%M", strtotime($tweet->created_at)); ?> Uhr</time></p>
+					<p class="text"><?php echo $text; ?></p>
+					<?php echo $medialink; ?>
+				</div>
+			</div> 
+        </div>
+
+<?php
+
+		$counter++;
+		}
+        }
+    } else {
+		echo 'Keine Tweets vorhanden.';
+	}
+		echo '</div>';
+
+if(rex::isBackend()) {
+
+echo '
+<style>
+
+img {
+  max-width: 100% !important;
+  margin: 0 5px 5px 5px;
+}
+
+p {
+  text-align: justify !important;
+}
+
+</style>'.PHP_EOL;
+}
+
+?>
