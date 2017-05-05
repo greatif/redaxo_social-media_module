@@ -22,5 +22,3 @@ Twitter
 * ruft auch eventuelle Fotos der Tweets ab
 
 ![Screenshot](https://github.com/greatif/redaxo_social-media_module/blob/master/twitter_backend_01.png)
-
-### Text
