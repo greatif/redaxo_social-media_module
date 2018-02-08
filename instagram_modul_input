@@ -1,34 +1,56 @@
 <fieldset class="form-horizontal">
 
     <legend>Anleitung</legend>
-	<div class="form-group">
-		<div class="col-sm-12">
-			<p><b><u>A. ACCESS-TOKEN für eine eigene App generieren </b><a href="https://www.instagram.com/developer/sandbox/" target="_blank">(Sandbox Mode) </a><b>:</b></u></p>
-			<p>1. Auf <a href="https://instagram.com/developer/" target="_blank">instagram.com/developer/</a> eine neue App registrieren.</p>
-			<p>2. Dabei die im Reiter <b><i>Details</i></b> eingetragene <b>redirect URI</b> merken.</p>	
-			<p>3. Im Reiter <b><i>Security</i></b> das Häkchen bei <b><i>Disable implicit OAuth</i></b> entfernen.</p>
-			<p>4. Nach Abschluss der Registrierung erhält man eine <b>CLIENT-ID</b>.</p>
-			<p>5. Über <a href="https://instagram.com/oauth/authorize/?client_id=[CLIENT-ID]&amp;redirect_uri=[REDIRECT-URI]&amp;response_type=token" target="_blank">instagram.com/.../?client_id=<b>[CLIENT-ID]</b>&amp;redirect_uri=<b>[REDIRECT-URI]</b>&amp;response_type=token</a> den <b>Access Token</b> ermitteln.</p>
-			<p>6. <b><u>ACCESS-TOKEN</u></b> nachstehend eintragen.</p>
-			<br />
-			<p><b><u>B. ACCESS-TOKEN über Fremdanbieter generieren </b>("out of the Sandbox") <b>:</b></u></p>
-			<p>1. Auf <a href="http://instagram.pixelunion.net" target="_blank">instagram.pixelunion.net</a> oder <a href="https://outofthesandbox.com/pages/instagram-access-token" target="_blank">outofthesandbox.com/pages/instagram-access-token</a> <b>Generate Access Token </b>anklicken.</p>
-			<p>2. Danach auf Instagram anmelden.</p>
-			<p>3. <b>Access your basic information</b> mit <b>Authorize</b> bestätigen.</p>
-			<p>4. <b><u>ACCESS-TOKEN</u></b> nachstehend eintragen.</p>
+		<div class="form-group">
+			<div class="col-sm-12">
+				<p><b><u>A. ACCESS-TOKEN für eine eigene App generieren </u></b><a href="https://www.instagram.com/developer/sandbox/" target="_blank">(Sandbox Mode) </a><b>:</b></p>
+				<p>1. Auf <a href="https://instagram.com/developer/" target="_blank">instagram.com/developer/</a> eine neue App registrieren.</p>
+				<p>2. Dabei die im Reiter <b><i>Details</i></b> eingetragene <b>redirect URI</b> merken.</p>
+				<p>3. Im Reiter <b><i>Security</i></b> das Häkchen bei <b><i>Disable implicit OAuth</i></b> entfernen.</p>
+				<p>4. Nach Abschluss der Registrierung erhält man eine <b>CLIENT-ID</b>.</p>
+				<p>5. Über <a href="https://instagram.com/oauth/authorize/?client_id=[CLIENT-ID]&amp;redirect_uri=[REDIRECT-URI]&amp;response_type=token" target="_blank">instagram.com/.../?client_id=<b>[CLIENT-ID]</b>&amp;redirect_uri=<b>[REDIRECT-URI]</b>&amp;response_type=token</a> den <b>Access Token</b> ermitteln.</p>
+				<p>6. <b><u>ACCESS-TOKEN</u></b> nachstehend eintragen.</p>
+				<br />
+				<p><b><u>B. ACCESS-TOKEN über Fremdanbieter generieren </b>("out of the Sandbox") <b>:</b></u></p>
+				<p>1. Auf <a href="http://instagram.pixelunion.net" target="_blank">instagram.pixelunion.net</a> oder <a href="https://outofthesandbox.com/pages/instagram-access-token" target="_blank">outofthesandbox.com/pages/instagram-access-token</a> <b>Generate Access Token </b>anklicken.</p>
+				<p>2. Danach auf Instagram anmelden.</p>
+				<p>3. <b>Access your basic information</b> mit <b>Authorize</b> bestätigen.</p>
+				<p>4. <b><u>ACCESS-TOKEN</u></b> nachstehend eintragen.</p>
+			</div>
 		</div>
-	</div>
-
-</fieldset>
-
-<fieldset class="form-horizontal">
 
     <legend>Instagram Account-Daten</legend>
 		<div class="form-group">
 			<label class="col-sm-4 control-label" for="hight">ACCESS-TOKEN</label>
-			<div class="col-sm-8">
-				<input class="form-control" id="hight" type="text" name="REX_INPUT_VALUE[1]" value="REX_VALUE[1]" />
-			</div>
+				<div class="col-sm-8">
+					<input class="form-control" id="hight" type="text" name="REX_INPUT_VALUE[1]" value="REX_VALUE[1]" />
+				</div>
+		</div>
+
+    <legend>Anzahl auszugebender Bilder</legend>
+		<div class="form-group">
+			<label class="col-sm-4 control-label" for="floating">Rahmen</label>
+				<div class="col-sm-8">';
+
+					<?php
+					$options = array(
+						'6'=>'6 Bilder',
+						'12'=>'12 Bilder',
+						'18'=>'18 Bilder'
+					);
+							
+					echo' <select name="REX_INPUT_VALUE[2]" id="floating" class="form-control">';
+						foreach ($options as $k=>$v) : 
+						echo' <option value="'.$k.'"';
+						if ($k == "REX_VALUE[2]") {
+							echo ' selected="selected"';
+						}
+						echo' >'.$v.'</option>';
+						endforeach;
+					echo' </select>';
+					?>
+					
+				</div>
 		</div>
 
 </fieldset>
