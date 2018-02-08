@@ -1,49 +1,43 @@
 <?php
+$userid = substr(REX_VALUE[1], 0, 10);
+$url = 'https://api.instagram.com/v1/users/'.$userid.'/media/recent/?access_token=REX_VALUE[1]';
+$output = '';
+$counter = 0;
 
-	$userid		= substr(REX_VALUE[1], 0, 10);
-	$url		= 'https://api.instagram.com/v1/users/'.$userid.'/media/recent/?access_token=REX_VALUE[1]';
-	$output		= '';
-	$counter	= 0;
+// Get cURL resource
+$curl = curl_init();
+// Options
+curl_setopt_array($curl, array(
+  CURLOPT_RETURNTRANSFER => 1,
+  CURLOPT_URL => $url,
+  CURLOPT_TIMEOUT => 4
+ ));
+// Send the request & save response to $resp
+$resp = curl_exec($curl);
+curl_close($curl);
 
-	// cURL-Session initialisieren
-	$curl = curl_init();
-
-	// Optionen
-	curl_setopt_array($curl, array(
-		CURLOPT_RETURNTRANSFER => 1,
-		CURLOPT_URL => $url,
-		CURLOPT_TIMEOUT => 4
-	));
-
-	// Request senden und Antwort in $resp speichern
-	$resp = curl_exec($curl);
-
-	// cURL-Session beenden
-	curl_close($curl);
-
-	// Ausgabe der letzten 16 Bilder
-	if($resp){
-		$output .= '
-			<div class="instagram">';
-		$output .= '		
-			<h2 class="text-center">Instagram</h2><br>';
+if($resp){
+	$output .= '
+		<div class="row">
+			<hr /><h2 class="text-center title-uppercase">Instagram</h2><br>';
 	
-		$data=json_decode($resp, true);
-		foreach((array)$data['data'] as $images){
-			if ($counter < 16) {
-				$output .= '
-					<a href="'.$images['link'].'" ><img src="'.$images['images']['thumbnail']['url'].'" alt="'.$images['id'].'"/></a>';
-				$counter++;
-			}
+	$data=json_decode($resp, true);
+	foreach((array)$data['data'] as $images){
+		if ($counter < REX_VALUE[2]) {
+			$output .= '
+				<div class="text-center col-md-2 col-sm-3 col-xs-6 instagram">
+					<a href="'.$images['link'].'" ><img src="'.$images['images']['thumbnail']['url'].'" alt="'.$images['id'].'"/><p><i class="fa fa-heart"></i> '.$images['likes']['count'].' | <i class="fa fa-comment"></i> '.$images['comments']['count'].'</p></a>
+				</div>';
+			$counter++;
 		}
-
-		$output .= '
-			</div>';
-		
-		echo $output;
-	
 	}
 
-	else echo "Es ist ein Fehler aufgetreten.";
+	$output .= '
+		</div>';
+		
+	echo $output;
+	
+}
+else echo "FEHLER";
 
 ?>
