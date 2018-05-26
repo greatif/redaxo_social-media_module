@@ -1,3 +1,13 @@
+<!-- JavaScript für Medien-PopUp -->
+
+<script language="JavaScript 1.2" type="text/javascript">
+	function popup(url,name,size)
+	{
+		window.open(url,name,size);
+	}
+</script>
+
+
 <?php
     
 	$username 	= REX_VALUE[1];
@@ -43,7 +53,7 @@
 	if(is_array($tweets) && count($tweets) > 0 ) {
 		
 	echo '<div class="row">';
-	echo '<h2 class="text-center">Tweets</h2><br>';
+	echo '<hr /><h2 class="text-center title-uppercase">Tweets</h2><br>';
 		
         foreach($tweets as $tweet) {
 		if ($counter < REX_VALUE[4]) {
@@ -56,20 +66,25 @@
 		$media = $tweet->entities->media;
             if (isset($media[0])) {
                 if ($media[0]->type == 'photo') {
-                    $item = $media[0]->media_url;
+                    $item = $media[0]->media_url_https.':large';
 					$medialink = '<p class="description text-center"><a href="'.$item.'" target="_blank"><img src="'.$item.'"></a></p>';
                 }
             }
 
 ?>
 
-        <div class="col-md-6 col-sm-12">
-			<div id="<?php echo $tweet->id_str; ?>" class="twitter">
+        <div class="col-md-6 col-sm-6">
+			<div id="<?php echo $tweet->id_str; ?>" class="article article-box equal-height-128">
 				<div class="content">
-					<p class="text"><a href="https://twitter.com/statuses/<?php echo $tweet->id_str; ?>" target="_blank"><img src="<?php echo $tweet->user->profile_image_url; ?>"><b> <?php echo $tweet->user->screen_name; ?></b></a></p>
-					<p class="text"><time datetime="<?php echo $tweet->created_at; ?>"><?php echo strftime("%A, den %d %B %Y, %H:%M", strtotime($tweet->created_at)); ?> Uhr</time></p>
-					<p class="text"><?php echo $text; ?></p>
-					<?php echo $medialink; ?>
+					<p class="description text-center"><a href="https://twitter.com/statuses/<?php echo $tweet->id_str; ?>" target="_blank"><img src="<?php echo $tweet->user->profile_image_url_https; ?>"><b> <?php echo $tweet->user->screen_name; ?></b></a></p>
+					<p class="description text-center"><time datetime="<?php echo $tweet->created_at; ?>"><?php echo strftime("%A, den %d %B %Y, %H:%M", strtotime($tweet->created_at)); ?> Uhr</time></p>
+					<p class="description text-center"><?php echo $text; ?></p>
+					
+					<!-- Medien-Link normal in neuem Fenster öffnen -->
+					<!-- <?php echo $medialink; ?> -->
+					
+					<!-- Medien-Link als JavaScript-PopUp öffnen -->
+					<p class="description text-center"><a href="javascript:popup('<?php echo $item; ?>','<?php echo $item; ?>','width=1024,height=768','toolbar=0,location=0,menubar=0')"><img src="<?php echo $item; ?>"></a></p>
 				</div>
 			</div> 
         </div>
