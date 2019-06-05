@@ -1,34 +1,82 @@
 <?php
+$access_token = REX_VALUE[1];
 $userid = substr(REX_VALUE[1], 0, 10);
-$url = 'https://api.instagram.com/v1/users/'.$userid.'/media/recent/?access_token=REX_VALUE[1]';
+
+// Wenn die Anzahl der auszugebenden Beiträge (REX_VALUE[2]) größer ist, als der max. Seiten-Count-Wert 33, dann (für die erste abzurufende Seite) den Count auf den Maximalwert 33 setzen
+$count = REX_VALUE[2];
+if ($count > 33 OR $count == 'alle') {
+	$count = 33;
+}
+
+$api_url = 'https://api.instagram.com/v1/users/'.$userid.'/media/recent/?access_token=REX_VALUE[1]&count='.$count.'';
 $output = '';
 $counter = 0;
 
-// Get cURL resource
+// Verbindung zur Instagram-API herstellen, um erste Seite abzurufen
 $curl = curl_init();
-// Options
 curl_setopt_array($curl, array(
   CURLOPT_RETURNTRANSFER => 1,
-  CURLOPT_URL => $url,
-  CURLOPT_TIMEOUT => 4
+  CURLOPT_URL => $api_url,
+  CURLOPT_TIMEOUT => 20,
+  CURLOPT_SSL_VERIFYPEER, 1
  ));
-// Send the request & save response to $resp
-$resp = curl_exec($curl);
+// Anfrage absenden, Antwort-Daten im JSON-Format in $data speichern und Verbindung beenden
+$json_decode = curl_exec($curl);
+$data = json_decode($json_decode, true);
 curl_close($curl);
+// URL der nächsten Seite
+$next_url = $data['pagination']['next_url'];
 
-if($resp){
+// dump($data);
+
+// Wenn Antwort-Daten vorhanden sind
+if($json_decode){
 	$output .= '
 		<div class="row">
 			<hr /><h2 class="text-center title-uppercase">Instagram</h2><br>';
-	
-	$data=json_decode($resp, true);
+
+	// Ausgabe für jeden abgerufenen Beitrag der ersten Seite		
 	foreach((array)$data['data'] as $images){
-		if ($counter < REX_VALUE[2]) {
-			$output .= '
-				<div class="text-center col-md-2 col-sm-3 col-xs-6 instagram">
-					<a href="'.$images['link'].'" ><img src="'.$images['images']['thumbnail']['url'].'" alt="'.$images['id'].'"/><p><i class="fa fa-heart"></i> '.$images['likes']['count'].' | <i class="fa fa-comment"></i> '.$images['comments']['count'].'</p></a>
-				</div>';
-			$counter++;
+		$output .= '
+			<div class="text-center col-md-2 col-sm-3 col-xs-6 instagram">
+				<a href="'.$images['link'].'" ><img src="'.$images['images']['thumbnail']['url'].'" alt="'.$images['id'].'"/><p><i class="fa fa-heart"></i> '.$images['likes']['count'].' | <i class="fa fa-comment"></i> '.$images['comments']['count'].'</p></a>
+			</div>';
+		// Anzahl der (insgesamt) ausgegebenen Beiträge zählen
+		$counter++;
+	}
+
+	// Wenn die Anzahl der bisher ausgegebenen Beiträge noch kleiner ist, als die Anzahl der Beiträge, die insgesamt ausgegeben werden sollen, dann erneut Verbindung zur Instagram-API herstellen u. über d. URL der nächsten Seite weitere Beiträge abrufen
+	if ($counter < REX_VALUE[2] OR REX_VALUE[2] == 'alle') {
+		// ...solange, wie eine weitere Seite existiert
+		while ($next_url) {
+			$curl = curl_init();
+			curl_setopt_array($curl, array(
+				CURLOPT_RETURNTRANSFER => 1,
+				CURLOPT_URL => $next_url,
+				CURLOPT_TIMEOUT => 20,
+				CURLOPT_SSL_VERIFYPEER, 1
+			));
+			$json_decode = curl_exec($curl);
+			$data = json_decode($json_decode, true);
+			curl_close($curl);
+			// URL der nächsten Seite
+			$next_url = $data['pagination']['next_url'];
+		
+			// dump($data);
+		
+			if($json_decode){
+				foreach((array)$data['data'] as $images){
+					// ...solange, bis die Anzahl der abzurufenden Beiträge erreicht ist
+					if ($counter < REX_VALUE[2] OR REX_VALUE[2] == 'alle') {
+						$output .= '
+							<div class="text-center col-md-2 col-sm-3 col-xs-6 instagram">
+								<a href="'.$images['link'].'" ><img src="'.$images['images']['thumbnail']['url'].'" alt="'.$images['id'].'"/><p><i class="fa fa-heart"></i> '.$images['likes']['count'].' | <i class="fa fa-comment"></i> '.$images['comments']['count'].'</p></a>
+							</div>';
+						$counter++;
+					}
+				}
+		
+			}
 		}
 	}
 
@@ -37,7 +85,8 @@ if($resp){
 		
 	echo $output;
 	
+} else {
+	echo "FEHLER";
 }
-else echo "FEHLER";
 
 ?>
