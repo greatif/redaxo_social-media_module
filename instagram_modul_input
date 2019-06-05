@@ -10,6 +10,7 @@
 				<p>4. Nach Abschluss der Registrierung erhält man eine <b>CLIENT-ID</b>.</p>
 				<p>5. Über <a href="https://instagram.com/oauth/authorize/?client_id=[CLIENT-ID]&amp;redirect_uri=[REDIRECT-URI]&amp;response_type=token" target="_blank">instagram.com/.../?client_id=<b>[CLIENT-ID]</b>&amp;redirect_uri=<b>[REDIRECT-URI]</b>&amp;response_type=token</a> den <b>Access Token</b> ermitteln.</p>
 				<p>6. <b><u>ACCESS-TOKEN</u></b> nachstehend eintragen.</p>
+				<p><u><b>Hinweis:</b> Bei Access-Tokens einer App, die sich im Sandbox-Modus befindet bzw. noch nicht reviewed wurde, beschränkt die Instagram-API den Abruf auf max. 20 Beiträge.</u></p>
 				<br />
 				<p><b><u>B. ACCESS-TOKEN über Fremdanbieter generieren </b>("out of the Sandbox") <b>:</b></u></p>
 				<p>1. Auf <a href="http://instagram.pixelunion.net" target="_blank">instagram.pixelunion.net</a> oder <a href="https://outofthesandbox.com/pages/instagram-access-token" target="_blank">outofthesandbox.com/pages/instagram-access-token</a> <b>Generate Access Token </b>anklicken.</p>
@@ -29,14 +30,16 @@
 
     <legend>Anzahl auszugebender Bilder</legend>
 		<div class="form-group">
-			<label class="col-sm-4 control-label" for="floating">Rahmen</label>
-				<div class="col-sm-8">';
+			<label class="col-sm-4 control-label" for="floating">Anzahl</label>
+				<div class="col-sm-8">
 
 					<?php
 					$options = array(
-						'6'=>'6 Bilder',
 						'12'=>'12 Bilder',
-						'18'=>'18 Bilder'
+						'24'=>'24 Bilder',
+						'33'=>'33 Bilder',
+                        '66'=>'66 Bilder',
+                        'alle'=>'alle Bilder'
 					);
 							
 					echo' <select name="REX_INPUT_VALUE[2]" id="floating" class="form-control">';
