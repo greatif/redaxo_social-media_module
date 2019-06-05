@@ -38,8 +38,8 @@
 						'12'=>'12 Bilder',
 						'24'=>'24 Bilder',
 						'33'=>'33 Bilder',
-                        '66'=>'66 Bilder',
-                        'alle'=>'alle Bilder'
+						'66'=>'66 Bilder',
+						'alle'=>'alle Bilder'
 					);
 							
 					echo' <select name="REX_INPUT_VALUE[2]" id="floating" class="form-control">';
